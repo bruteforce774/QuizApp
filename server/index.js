@@ -1,8 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import { MongoClient } from "mongodb";
-import path from "path";
-import { fileURLToPath } from "url";
+import he from "he";
 
 const { MONGODB_URI, DB_NAME, PORT } = process.env;
 
@@ -28,9 +27,11 @@ app.get("/api/questions", async (req, res) => {
         "https://opentdb.com/api.php?amount=10&category=9&type=multiple",
       );
       const data = await response.json();
-      const questions = data.results.map((q) => ({
-        question: q.question,
-        answer: q.correct_answer,
+      const questions = data.results
+        .filter((q) => !q.question.toLowerCase().includes('following'))
+        .map((q) => ({
+        question: he.decode(q.question),
+        answer: he.decode(q.correct_answer),
       }));
       return res.json(questions);
     }
