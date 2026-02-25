@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { type Question } from '../types'
 
 export const useQuizStore = defineStore('quiz', () => {
-  const questions = ref<Question>[]([])
+  const questions = ref<Question[]>([])
   const isLoading = ref(false)
   const errorMessage = ref<string | null>(null)
 
@@ -21,4 +21,6 @@ export const useQuizStore = defineStore('quiz', () => {
       isLoading.value = false
     }
   }
+
+  return { questions, isLoading, errorMessage, fetchQuestions }
 })
