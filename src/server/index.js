@@ -20,10 +20,25 @@ app.use(express.json());
 
 let db;
 
-app.get("/api/questions", async (_req, res) => {
+app.get("/api/questions", async (req, res) => {
   try {
-    const questions = await db.collection("questions").find().toArray();
-    res.json(questions);
+    if(req.query.topic === 'general') {
+      // fetch from Open Trivia API
+      const response = await fetch(
+        "https://opentdb.com/api.php?amount=10&category=9&type=multiple",
+      );
+      const data = await response.json();
+      const questions = data.results.map((q) => ({
+        question: q.question,
+        options: [...q.incorrect_answers, q.correct_answer].sort(() => Math.random() - 0.5),
+        answer: q.correct_answer,
+      }));
+      return res.json(questions);
+    }
+    else {
+      const questions = await db.collection("questions").find({ topic: req.query.topic }).toArray();
+      res.json(questions);
+    }
   } catch (error) {
     console.error("Failed to fetch questions:", error);
     res.status(500).json({ error: "Failed to fetch questions" });
