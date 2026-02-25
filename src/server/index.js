@@ -30,7 +30,6 @@ app.get("/api/questions", async (req, res) => {
       const data = await response.json();
       const questions = data.results.map((q) => ({
         question: q.question,
-        options: [...q.incorrect_answers, q.correct_answer].sort(() => Math.random() - 0.5),
         answer: q.correct_answer,
       }));
       return res.json(questions);
