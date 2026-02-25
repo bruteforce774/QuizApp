@@ -7,12 +7,12 @@ export const useQuizStore = defineStore('quiz', () => {
   const isLoading = ref(false)
   const errorMessage = ref<string | null>(null)
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = async (topic: string) => {
     isLoading.value = true
     errorMessage.value = null
 
     try {
-      const response = await fetch('/api/questions')
+      const response = await fetch(`/api/questions?topic=${topic}`)
       if (!response.ok) throw new Error('Failed to load')
       questions.value = await response.json()
     } catch (error) {
