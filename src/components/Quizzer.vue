@@ -21,4 +21,17 @@ watch(selectedTopic, (newTopic) => {
     <option value="science">Science</option>
     <option value="history">History</option>
   </select>
+
+  <div v-if="quizStore.isLoading">Loading...</div>
+
+  <div v-else-if="quizStore.errorMessage">
+    {{ quizStore.errorMessage }}
+  </div>
+
+  <ul v-else-if="quizStore.questions.length">
+    <li v-for="q in quizStore.questions" :key="q.question">
+      <p>{{ q.question }}</p>
+      <p><strong>Answer:</strong> {{ q.answer }}</p>
+    </li>
+  </ul>
 </template>

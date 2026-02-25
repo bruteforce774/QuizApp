@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const { MONGODB_URI, DB_NAME = "quiz", PORT = 3000 } = process.env;
+const { MONGODB_URI, DB_NAME, PORT } = process.env;
 
 if (!MONGODB_URI) {
   console.error(
